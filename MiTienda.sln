@@ -1,0 +1,29 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36212.18
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MiTienda", "MiTienda\MiTienda.csproj", "{D74A1BBB-4F25-4E8C-8131-DCB6D7936C5D}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "MiTiendaInstaller", "MiTiendaInstaller\MiTiendaInstaller.vdproj", "{13F9E9DF-1EF4-0ADF-BA0D-D8EF37335983}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D74A1BBB-4F25-4E8C-8131-DCB6D7936C5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D74A1BBB-4F25-4E8C-8131-DCB6D7936C5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D74A1BBB-4F25-4E8C-8131-DCB6D7936C5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D74A1BBB-4F25-4E8C-8131-DCB6D7936C5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{13F9E9DF-1EF4-0ADF-BA0D-D8EF37335983}.Debug|Any CPU.ActiveCfg = Debug
+		{13F9E9DF-1EF4-0ADF-BA0D-D8EF37335983}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {05A758A1-5923-4280-A652-73265EB9F35F}
+	EndGlobalSection
+EndGlobal
