@@ -135,6 +135,75 @@ namespace MiTienda.Formularios
         }
 
 
+        //private void GuardarYGenerarFactura()
+        //{
+        //    if (clienteID <= 0)
+        //    {
+        //        MessageBox.Show("No se ha seleccionado un cliente válido.");
+        //        return;
+        //    }
+
+        //    if (dgvDetalle.Rows.Count == 0)
+        //    {
+        //        MessageBox.Show("No hay artículos en la factura.");
+        //        return;
+        //    }
+
+        //    DataTable tablaDetalle = ConstruirTablaDetalle();
+
+        //    using (SqlConnection conn = Clases.Conexion.ObtenerConexion())
+        //    {
+        //        SqlCommand cmd = new SqlCommand("CrearFactura", conn);
+        //        cmd.CommandType = CommandType.StoredProcedure;
+
+        //        cmd.Parameters.AddWithValue("@ClienteID", clienteID);
+
+        //        SqlParameter detalleParam = cmd.Parameters.AddWithValue("@Detalle", tablaDetalle);
+        //        detalleParam.SqlDbType = SqlDbType.Structured;
+        //        detalleParam.TypeName = "dbo.DetalleVentaTipo";
+
+        //        SqlParameter outputId = new SqlParameter("@FacturaID", SqlDbType.Int);
+        //        outputId.Direction = ParameterDirection.Output;
+        //        cmd.Parameters.Add(outputId);
+
+        //        conn.Open();
+        //        cmd.ExecuteNonQuery();
+        //        conn.Close();
+
+        //        facturaIDActual = Convert.ToInt32(outputId.Value);
+        //    }
+
+        //    // Generar PDF
+        //    string rutaPDF = "";
+        //    try
+        //    {
+        //        rutaPDF = GenerarFacturaPDF(facturaIDActual, lblNombreCliente.Text, dgvDetalle);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        MessageBox.Show("Error al generar el PDF: " + ex.Message);
+        //        return;
+        //    }
+
+        //    // Registrar ruta del PDF
+        //    using (SqlConnection conn = Clases.Conexion.ObtenerConexion())
+        //    {
+        //        SqlCommand cmd = new SqlCommand("RegistrarRutaPDF", conn);
+        //        cmd.CommandType = CommandType.StoredProcedure;
+
+        //        cmd.Parameters.AddWithValue("@FacturaID", facturaIDActual);
+        //        cmd.Parameters.AddWithValue("@RutaPDF", rutaPDF);
+
+        //        conn.Open();
+        //        cmd.ExecuteNonQuery();
+        //        conn.Close();
+        //    }
+
+        //    MessageBox.Show($"Factura registrada correctamente. N° {facturaIDActual}");
+        //    LimpiarFormulario();
+
+        //}
+
         private void GuardarYGenerarFactura()
         {
             if (clienteID <= 0)
@@ -151,29 +220,28 @@ namespace MiTienda.Formularios
 
             DataTable tablaDetalle = ConstruirTablaDetalle();
 
-            using (SqlConnection conn = Clases.Conexion.ObtenerConexion())
+            using (var conn = Clases.Conexion.CrearConexion())
+            using (var cmd = new SqlCommand("CrearFactura", conn))
             {
-                SqlCommand cmd = new SqlCommand("CrearFactura", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
-
                 cmd.Parameters.AddWithValue("@ClienteID", clienteID);
 
                 SqlParameter detalleParam = cmd.Parameters.AddWithValue("@Detalle", tablaDetalle);
                 detalleParam.SqlDbType = SqlDbType.Structured;
                 detalleParam.TypeName = "dbo.DetalleVentaTipo";
 
-                SqlParameter outputId = new SqlParameter("@FacturaID", SqlDbType.Int);
-                outputId.Direction = ParameterDirection.Output;
+                SqlParameter outputId = new SqlParameter("@FacturaID", SqlDbType.Int)
+                {
+                    Direction = ParameterDirection.Output
+                };
                 cmd.Parameters.Add(outputId);
 
                 conn.Open();
                 cmd.ExecuteNonQuery();
-                conn.Close();
 
                 facturaIDActual = Convert.ToInt32(outputId.Value);
             }
 
-            // Generar PDF
             string rutaPDF = "";
             try
             {
@@ -185,24 +253,21 @@ namespace MiTienda.Formularios
                 return;
             }
 
-            // Registrar ruta del PDF
-            using (SqlConnection conn = Clases.Conexion.ObtenerConexion())
+            using (var conn = Clases.Conexion.CrearConexion())
+            using (var cmd = new SqlCommand("RegistrarRutaPDF", conn))
             {
-                SqlCommand cmd = new SqlCommand("RegistrarRutaPDF", conn);
                 cmd.CommandType = CommandType.StoredProcedure;
-
                 cmd.Parameters.AddWithValue("@FacturaID", facturaIDActual);
                 cmd.Parameters.AddWithValue("@RutaPDF", rutaPDF);
 
                 conn.Open();
                 cmd.ExecuteNonQuery();
-                conn.Close();
             }
 
             MessageBox.Show($"Factura registrada correctamente. N° {facturaIDActual}");
             LimpiarFormulario();
-
         }
+
 
 
         private int facturaIDActual = 0; // aquí guardaremos el ID de la última factura
@@ -386,11 +451,48 @@ namespace MiTienda.Formularios
         }
 
 
+        //private void BuscarArticuloPorCodigo()
+        //{
+        //    if (string.IsNullOrWhiteSpace(txtCodigoArticulo.Text))
+        //    {
+        //        // ✅ Limpiar etiquetas si el campo está vacío
+        //        lblNombreArticulo.Text = "";
+        //        lblPrecio.Text = "";
+        //        lblStock.Text = "";
+        //        txtCantidad.Clear();
+        //        return;
+        //    }
+
+
+        //    using (SqlConnection conn = Conexion.ObtenerConexion())
+        //    {
+        //        string query = "SELECT Nombre, Precio, Stock FROM Articulos WHERE CodigoArticulo = @Codigo";
+        //        SqlCommand cmd = new SqlCommand(query, conn);
+        //        cmd.Parameters.AddWithValue("@Codigo", txtCodigoArticulo.Text);
+
+        //        conn.Open();
+        //        SqlDataReader reader = cmd.ExecuteReader();
+        //        if (reader.Read())
+        //        {
+        //            lblNombreArticulo.Text = reader["Nombre"].ToString();
+        //            lblPrecio.Text = Convert.ToDecimal(reader["Precio"]).ToString("0.00");
+        //            lblStock.Text = reader["Stock"].ToString();
+        //            txtCantidad.Focus();
+        //        }
+        //        else
+        //        {
+        //            MessageBox.Show("Artículo no encontrado.");
+        //            lblNombreArticulo.Text = "";
+        //            lblPrecio.Text = "";
+        //            lblStock.Text = "";
+        //        }
+        //        conn.Close();
+        //    }
+        //}
         private void BuscarArticuloPorCodigo()
         {
             if (string.IsNullOrWhiteSpace(txtCodigoArticulo.Text))
             {
-                // ✅ Limpiar etiquetas si el campo está vacío
                 lblNombreArticulo.Text = "";
                 lblPrecio.Text = "";
                 lblStock.Text = "";
@@ -398,32 +500,32 @@ namespace MiTienda.Formularios
                 return;
             }
 
-
-            using (SqlConnection conn = Conexion.ObtenerConexion())
+            using (var conn = Clases.Conexion.CrearConexion())
+            using (var cmd = new SqlCommand("SELECT Nombre, Precio, Stock FROM Articulos WHERE CodigoArticulo = @Codigo", conn))
             {
-                string query = "SELECT Nombre, Precio, Stock FROM Articulos WHERE CodigoArticulo = @Codigo";
-                SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@Codigo", txtCodigoArticulo.Text);
 
                 conn.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-                if (reader.Read())
+                using (var reader = cmd.ExecuteReader())
                 {
-                    lblNombreArticulo.Text = reader["Nombre"].ToString();
-                    lblPrecio.Text = Convert.ToDecimal(reader["Precio"]).ToString("0.00");
-                    lblStock.Text = reader["Stock"].ToString();
-                    txtCantidad.Focus();
+                    if (reader.Read())
+                    {
+                        lblNombreArticulo.Text = reader["Nombre"].ToString();
+                        lblPrecio.Text = Convert.ToDecimal(reader["Precio"]).ToString("0.00");
+                        lblStock.Text = reader["Stock"].ToString();
+                        txtCantidad.Focus();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Artículo no encontrado.");
+                        lblNombreArticulo.Text = "";
+                        lblPrecio.Text = "";
+                        lblStock.Text = "";
+                    }
                 }
-                else
-                {
-                    MessageBox.Show("Artículo no encontrado.");
-                    lblNombreArticulo.Text = "";
-                    lblPrecio.Text = "";
-                    lblStock.Text = "";
-                }
-                conn.Close();
             }
         }
+
 
         private decimal ObtenerTotalDesdeLabel()
         {
@@ -477,6 +579,48 @@ namespace MiTienda.Formularios
         }
         int clienteID = 0; // Declara esto a nivel de clase, fuera de cualquier método
 
+        //private void BuscarClientePorTelefono()
+        //{
+        //    if (txtTelefonoCliente.Text != "1" && txtTelefonoCliente.Text.Length < 8)
+        //    {
+        //        MessageBox.Show("El número debe tener al menos 8 dígitos o ser '1' para cliente general.");
+        //        txtTelefonoCliente.Focus();
+        //        return;
+        //    }
+
+        //    using (SqlConnection conn = Clases.Conexion.ObtenerConexion()) 
+        //    {
+        //        string query = "EXEC BuscarClientePorTelefono @Telefono";
+        //        SqlCommand cmd = new SqlCommand(query, conn);
+        //        cmd.Parameters.AddWithValue("@Telefono", txtTelefonoCliente.Text);
+
+        //        conn.Open();
+        //        SqlDataReader reader = cmd.ExecuteReader();
+        //        if (reader.Read())
+        //        {
+        //            lblNombreCliente.Text = reader["Nombre"].ToString(); // Muestra el nombre en el label
+        //            clienteID = Convert.ToInt32(reader["ClienteID"]);
+        //            // ✅ Mover el foco al campo de artículo
+        //            txtCodigoArticulo.Focus();
+        //            txtCodigoArticulo.SelectAll();
+        //        }
+        //        else
+        //        {
+        //            MessageBox.Show("Cliente no encontrado.");
+
+        //            var nuevoCliente = new FrmClientes();
+        //            if (nuevoCliente.ShowDialog() == DialogResult.OK)
+        //            {
+        //                // Reintentar búsqueda después de registrar
+        //                BuscarClientePorTelefono();
+        //            }
+
+        //            lblNombreCliente.Text = "";
+        //            clienteID = 0;
+        //        }
+        //        conn.Close();
+        //    }
+        //}
         private void BuscarClientePorTelefono()
         {
             if (txtTelefonoCliente.Text != "1" && txtTelefonoCliente.Text.Length < 8)
@@ -486,39 +630,36 @@ namespace MiTienda.Formularios
                 return;
             }
 
-            using (SqlConnection conn = Clases.Conexion.ObtenerConexion()) 
+            using (var conn = Clases.Conexion.CrearConexion())
+            using (var cmd = new SqlCommand("EXEC BuscarClientePorTelefono @Telefono", conn))
             {
-                string query = "EXEC BuscarClientePorTelefono @Telefono";
-                SqlCommand cmd = new SqlCommand(query, conn);
                 cmd.Parameters.AddWithValue("@Telefono", txtTelefonoCliente.Text);
 
                 conn.Open();
-                SqlDataReader reader = cmd.ExecuteReader();
-                if (reader.Read())
+                using (var reader = cmd.ExecuteReader())
                 {
-                    lblNombreCliente.Text = reader["Nombre"].ToString(); // Muestra el nombre en el label
-                    clienteID = Convert.ToInt32(reader["ClienteID"]);
-                    // ✅ Mover el foco al campo de artículo
-                    txtCodigoArticulo.Focus();
-                    txtCodigoArticulo.SelectAll();
-                }
-                else
-                {
-                    MessageBox.Show("Cliente no encontrado.");
-
-                    var nuevoCliente = new FrmClientes();
-                    if (nuevoCliente.ShowDialog() == DialogResult.OK)
+                    if (reader.Read())
                     {
-                        // Reintentar búsqueda después de registrar
-                        BuscarClientePorTelefono();
+                        lblNombreCliente.Text = reader["Nombre"].ToString();
+                        clienteID = Convert.ToInt32(reader["ClienteID"]);
+                        txtCodigoArticulo.Focus();
+                        txtCodigoArticulo.SelectAll();
                     }
-
-                    lblNombreCliente.Text = "";
-                    clienteID = 0;
+                    else
+                    {
+                        MessageBox.Show("Cliente no encontrado.");
+                        var nuevoCliente = new FrmClientes();
+                        if (nuevoCliente.ShowDialog() == DialogResult.OK)
+                        {
+                            BuscarClientePorTelefono();
+                        }
+                        lblNombreCliente.Text = "";
+                        clienteID = 0;
+                    }
                 }
-                conn.Close();
             }
         }
+
 
         private void btnAgregarArticulo_Click(object sender, EventArgs e)
         {
@@ -738,7 +879,7 @@ namespace MiTienda.Formularios
                 // Paso 1: Generar y registrar factura
                 DataTable tablaDetalle = ConstruirTablaDetalle();
 
-                using (SqlConnection conn = Clases.Conexion.ObtenerConexion())
+                using (SqlConnection conn = Clases.Conexion.CrearConexion())
                 {
                     SqlCommand cmd = new SqlCommand("CrearFactura", conn);
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -779,7 +920,7 @@ namespace MiTienda.Formularios
                 }
 
                 // Paso 3: Registrar ruta del PDF
-                using (SqlConnection conn = Clases.Conexion.ObtenerConexion())
+                using (SqlConnection conn = Clases.Conexion.CrearConexion())
                 {
                     SqlCommand cmd = new SqlCommand("RegistrarRutaPDF", conn);
                     cmd.CommandType = CommandType.StoredProcedure;
@@ -794,7 +935,7 @@ namespace MiTienda.Formularios
 
                 // Paso 4: Obtener correo del cliente
                 string correoCliente = "";
-                using (SqlConnection conn = Clases.Conexion.ObtenerConexion())
+                using (SqlConnection conn = Clases.Conexion.CrearConexion())
                 {
                     string query = "SELECT CorreoElectronico FROM Clientes WHERE ClienteID = @ClienteID";
                     SqlCommand cmd = new SqlCommand(query, conn);
@@ -895,7 +1036,7 @@ namespace MiTienda.Formularios
                 // Paso 1: Generar y registrar factura en BD
                 DataTable tablaDetalle = ConstruirTablaDetalle();
 
-                using (SqlConnection conn = Clases.Conexion.ObtenerConexion())
+                using (SqlConnection conn = Clases.Conexion.CrearConexion())
                 {
                     SqlCommand cmd = new SqlCommand("CrearFactura", conn);
                     cmd.CommandType = CommandType.StoredProcedure;

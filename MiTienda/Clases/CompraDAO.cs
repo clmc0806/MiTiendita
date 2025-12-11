@@ -12,7 +12,7 @@ namespace MiTienda.Clases
     {
         public static DataTable ObtenerComprasPorFecha(DateTime desde, DateTime hasta)
         {
-            using (SqlConnection conn = Conexion.ObtenerConexion())
+            using (SqlConnection conn = Conexion.CrearConexion())
             {
                 conn.Open();
                 string query = @"SELECT FC.IdFactura, FC.NumeroFactura, FC.FechaCompra, P.Nombre AS Proveedor, FC.Total
@@ -38,7 +38,7 @@ namespace MiTienda.Clases
 
         public static DataTable ObtenerDetalleFactura(int idFactura)
         {
-            using (SqlConnection conn = Conexion.ObtenerConexion())
+            using (SqlConnection conn = Conexion.CrearConexion())
             {
                 conn.Open();
                 string query = @"SELECT A.Nombre AS Producto, DFC.Cantidad, DFC.PrecioCosto, DFC.SubTotal

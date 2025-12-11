@@ -63,7 +63,7 @@
             this.dgvCoincidenciass.Name = "dgvCoincidenciass";
             this.dgvCoincidenciass.Size = new System.Drawing.Size(871, 150);
             this.dgvCoincidenciass.TabIndex = 1;
-            this.dgvCoincidenciass.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dgvCoincidenciass_CellDoubleClick);
+           
             // 
             // dgvHistorial
             // 
@@ -108,7 +108,7 @@
             this.btnLimpiarBusqueda.TabIndex = 6;
             this.btnLimpiarBusqueda.Text = "LIMPIAR";
             this.btnLimpiarBusqueda.UseVisualStyleBackColor = true;
-            this.btnLimpiarBusqueda.Click += new System.EventHandler(this.btnLimpiarBusqueda_Click);
+            
             // 
             // btnExportarExcel
             // 
@@ -118,7 +118,7 @@
             this.btnExportarExcel.TabIndex = 7;
             this.btnExportarExcel.Text = "EXPORTAR ARTICULO";
             this.btnExportarExcel.UseVisualStyleBackColor = true;
-            this.btnExportarExcel.Click += new System.EventHandler(this.btnExportarExcel_Click);
+           
             // 
             // dtpDesde
             // 
@@ -171,7 +171,7 @@
             this.chkFiltrarPorFechas.TabIndex = 13;
             this.chkFiltrarPorFechas.Text = "Reporte por fecha";
             this.chkFiltrarPorFechas.UseVisualStyleBackColor = true;
-            this.chkFiltrarPorFechas.CheckedChanged += new System.EventHandler(this.chkFiltrarPorFechas_CheckedChanged);
+            
             // 
             // btnCerrar
             // 
@@ -181,7 +181,7 @@
             this.btnCerrar.TabIndex = 14;
             this.btnCerrar.Text = "Cerrar";
             this.btnCerrar.UseVisualStyleBackColor = true;
-            this.btnCerrar.Click += new System.EventHandler(this.btnCerrar_Click);
+            
             // 
             // btnExportarHistorial
             // 
@@ -191,7 +191,7 @@
             this.btnExportarHistorial.TabIndex = 15;
             this.btnExportarHistorial.Text = "EXPORTAR HISTORIAL";
             this.btnExportarHistorial.UseVisualStyleBackColor = true;
-            this.btnExportarHistorial.Click += new System.EventHandler(this.btnExportarHistorial_Click);
+            
             // 
             // FrmHistorialArticulo
             // 
@@ -216,7 +216,7 @@
             this.Controls.Add(this.txtBuscarArticulo);
             this.Name = "FrmHistorialArticulo";
             this.Text = "FrmHistorialArticulo";
-            this.Load += new System.EventHandler(this.FrmHistorialArticulo_Load);
+           
             ((System.ComponentModel.ISupportInitialize)(this.dgvCoincidenciass)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvHistorial)).EndInit();
             this.ResumeLayout(false);

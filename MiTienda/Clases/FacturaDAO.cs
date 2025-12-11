@@ -12,7 +12,7 @@ namespace MiTienda.Clases
     {
         public static void InsertarDetalle(int facturaId, List<DetalleFacturaDTO> detalles)
         {
-            using (SqlConnection conn = Conexion.ObtenerConexion())
+            using (SqlConnection conn = Conexion.CrearConexion())
             {
                 conn.Open();
                 foreach (var item in detalles)
@@ -38,7 +38,7 @@ namespace MiTienda.Clases
 
         public static void ActualizarStock(string codigoArticulo, int cantidadVendida)
         {
-            using (SqlConnection conn = Conexion.ObtenerConexion())
+            using (SqlConnection conn = Conexion.CrearConexion())
             {
                 conn.Open();
                 string query = @"UPDATE Articulos
@@ -55,7 +55,7 @@ namespace MiTienda.Clases
         }
         public static int InsertarFactura(DateTime fecha, int clienteID, decimal total, string rutaPDF)
         {
-            using (SqlConnection conn = Conexion.ObtenerConexion())
+            using (SqlConnection conn = Conexion.CrearConexion())
             {
                 conn.Open();
 

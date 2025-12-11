@@ -5937,7 +5937,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:MiTiendaInstaller"
         "ProductCode" = "8:{0F11AD60-73D6-4D1D-BED2-BA0FB9290685}"
-        "PackageCode" = "8:{5D1FB031-6372-4CC2-9901-701879FC91B2}"
+        "PackageCode" = "8:{6CD7A79A-B2E1-4359-941F-E183DA450F21}"
         "UpgradeCode" = "8:{D8D4AA8E-8588-487D-8140-411C554F4BF1}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
